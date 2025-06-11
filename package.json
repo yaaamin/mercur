@@ -1,22 +1,30 @@
 {
+  "name": "mercur-marketplace",
+  "version": "1.0.0",
   "private": true,
-  "name": "mercur",
-  "version": "0.9.0",
-  "devDependencies": {
-    "turbo": "^2.3.3"
+  "engines": {
+    "node": ">=18.0.0",
+    "yarn": ">=1.22.0"
   },
-  "packageManager": "yarn@1.22.21",
+  "scripts": {
+    "heroku-prebuild": "echo 'Starting Mercur build process...'",
+    "build": "yarn install && yarn workspace @mercurjs/backend build && yarn codegen",
+    "heroku-postbuild": "yarn setup:db && yarn generate:oas",
+    "start": "yarn workspace @mercurjs/backend start",
+    "dev": "turbo dev",
+    "setup:db": "cd apps/backend && yarn medusa db:migrate && yarn seed",
+    "generate:oas": "cd apps/backend && yarn generate:oas",
+    "codegen": "turbo codegen",
+    "install:all": "yarn install --frozen-lockfile"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
-  "scripts": {
-    "postinstall": "npx patch-package",
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "format": "turbo run format",
-    "lint": "turbo run lint",
-    "codegen": "turbo run codegen",
-    "generate:oas": "turbo run generate:oas"
+  "devDependencies": {
+    "turbo": "^1.10.0"
+  },
+  "dependencies": {
+    "@medusajs/medusa": "^2.0.0"
   }
 }
